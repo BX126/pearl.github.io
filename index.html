@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEARL: Self-Evolving Assistant for Time Management</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .serif-text {
+            font-family: 'Noto Serif', serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #2563eb, #9333ea);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .paper-button {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .paper-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Header Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-6 leading-tight">
+                <span class="gradient-text">PEARL</span>: <br>Self-Evolving Assistant for <br
+                    class="hidden sm:block" />Time Management with RL
+            </h1>
+
+            <!-- Authors -->
+            <div class="text-lg mb-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-gray-700">
+                <span class="font-medium hover:text-blue-600 transition-colors cursor-pointer"><a
+                        href="https://bingxuan.li/" target="_blank">Bingxuan
+                        Li</a><sup>1</sup></span>
+                <span class="font-medium hover:text-blue-600 transition-colors cursor-pointer"><a
+                        href="https://wjdghks950.github.io" target="_blank">Jeonghwan
+                        Kim</a><sup>1</sup></span>
+                <span class="font-medium hover:text-blue-600 transition-colors cursor-pointer"><a
+                        href="https://qiancheng0.github.io" target="_blank">Cheng
+                        Qian</a><sup>1</sup></span>
+                <span class="font-medium hover:text-blue-600 transition-colors cursor-pointer"><a
+                        href="https://xiusic.github.io" target="_blank">Xiusi
+                        Chen</a><sup>1</sup></span>
+                <span class="font-medium hover:text-blue-600 transition-colors cursor-pointer"><a
+                        href="https://www.linkedin.com/in/eitan-anzenberg-phd-5639b444/" target="_blank">Eitan
+                        Anzenberg</a>
+                    <sup>2</sup>
+                </span>
+                <span class="font-medium hover:text-blue-600 transition-colors cursor-pointer"><a
+                        href="https://niran-kundapur.com/about/" target="_blank"></a>Niran
+                    Kundapur</a><sup>2</sup></span>
+                <span class="font-medium hover:text-blue-600 transition-colors cursor-pointer"><a
+                        href="http://blender.cs.illinois.edu/hengji.html" target="_blank">Heng
+                        Ji</a><sup>1</sup></span>
+            </div>
+
+            <!-- Affiliations -->
+            <div class="text-lg text-gray-500 mb-8 space-y-1">
+                <p><sup>1</sup> University of Illinois at Urbana-Champaign &nbsp;&nbsp;&nbsp;&nbsp; <sup>2</sup>
+                    Eightfold.ai
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#"
+                    class="paper-button bg-gray-900 text-white px-6 py-3 rounded-full flex items-center gap-2 font-medium">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    Paper
+                </a>
+                <a href="#"
+                    class="paper-button bg-gray-800 text-white px-6 py-3 rounded-full flex items-center gap-2 font-medium">
+                    <i class="fa-brands fa-github"></i>
+                    Code
+                </a>
+                <a href="#"
+                    class="paper-button bg-gray-200 text-gray-800 px-6 py-3 rounded-full flex items-center gap-2 font-medium hover:bg-gray-300 disabled:opacity-50">
+                    <i class="fa-solid fa-database"></i>
+                    Dataset
+                </a>
+            </div>
+        </div>
+
+        <!--Motivation -->
+        <section class="mb-16">
+            <img src="images/motivation.png" alt="Motivation: resolving calendar conflicts with AI assistance"
+                class="w-full rounded-xl shadow-lg">
+            <p class="text-sm text-gray-600 italic text-center mt-3">
+                Motivating scenario: from conflict overload to confident, preference-aware scheduling with PEARL.
+            </p>
+        </section>
+
+
+
+        <!-- Abstract -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200">Introduction</h2>
+            <p class="text-gray-700 leading-relaxed text-lg serif-text text-justify">
+                Overlapping calendar invitations force busy professionals to repeatedly decide which meetings to attend,
+                reschedule, or decline. We refer to this preference-driven decision process as calendar conflict
+                resolution. Automating such process is crucial yet challenging: Scheduling logistics drain hours, and
+                human delegation often fails at scale, raising the question of whether large language model (LLM) or
+                language agents can reliably learn and apply user preferences to manage time.
+                <br><br>
+                To enable systematic study, we introduce <a href="#calconflictbench"
+                    class="text-blue-600 font-semibold hover:underline">CALCONFLICTBENCH</a>, a benchmark for
+                long-horizon calendar conflict resolution. Conflicts are presented sequentially and agents receive
+                feedback after each round, requiring them to infer and adapt to user preferences progressively. Our
+                experiments show that current LLM agents perform poorly with high error rates. To address this gap, we
+                propose <a href="#pearl" class="text-blue-600 font-semibold hover:underline">PEARL</a>, a
+                reinforcement-learning framework that augments language agent with an external memory module and
+                optimized round-wise reward design, enabling agent to progressively infer and adapt to user preferences
+                on-the-fly. Experiments on CALCONFLICTBENCH shows that PEARL achieves 0.76 error reduction rate, and 55%
+                improvement on average error rate compared to the strongest baseline.
+            </p>
+        </section>
+
+        <!-- The Problem & Benchmark -->
+        <section id="calconflictbench" class="mb-16">
+            <h2 class="text-2xl font-bold mb-4 border-b pb-2 border-gray-200">CalConflictBench: Can we trust LLMs to
+                manage time?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        Scheduling logistics drain hours each week. While LLMs show promise, it remains unclear if they
+                        can handle the nuances of personal time management where preferences drift and constraints are
+                        complex.
+                    </p>
+                    <p class="text-gray-700 leading-relaxed">
+                        We propose the <strong>CALCONFLICTBENCH</strong>, a new benchmark featuring:
+                    </p>
+                    <ul class="list-disc list-inside mt-2 space-y-2 text-gray-700 ml-2">
+                        <li><strong>Synthetic Users:</strong> Diverse organizational roles and year-long calendars.</li>
+                        <li><strong>Long-Horizon:</strong> Conflicts presented sequentially; agents must learn from
+                            feedback.</li>
+                        <li><strong>Complex Conflicts:</strong> Scenarios requiring balancing urgency, hierarchy, and
+                            personal values.</li>
+                    </ul>
+                </div>
+                <!-- Figure 1 -->
+                <div>
+                    <img src="images/fig1.png" alt="Calendar conflict resolution loop illustration"
+                        class="w-3/4 mx-auto rounded-xl shadow-lg mb-4">
+                    <p class="text-sm text-gray-600 text-center italic max-w-2xl mx-auto">
+                        Illustration of the proposed calendar conflict resolution task. At decision
+                        round <em>t</em>, the agent observes conflicting events, contextual information, and calendar
+                        state to
+                        select exactly one event to accept.
+                    </p>
+                </div>
+            </div>
+            <div class="mt-8">
+                <h3 class="font-bold text-gray-800 mb-3">Preliminary Evaluation</h3>
+                <img src="images/table1.png" alt="Performance comparison table" class="w-full rounded-xl shadow-lg">
+                <p class="text-xs text-gray-500 mt-2">
+                    * Comparison on CALCONFLICTBENCH (W=20, M=5). PEARL achieves significantly lower error rates
+                    compared to strong baselines.
+                </p>
+                <br>
+                <div class="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                    <h3 class="font-bold text-blue-900 mb-2"><i class="fa-solid fa-triangle-exclamation"></i> Key
+                        Challenge</h3>
+                    <p class="text-blue-800 text-lg">
+                        "Current LLM agents have weak ability to infer, retain, and refine preference-driven decision
+                        principles over long horizons."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Method: PEARL -->
+        <section id="pearl" class="mb-16 bg-gray-50 rounded-2xl p-8 border border-gray-200">
+            <h2 class="text-2xl font-bold mb-6 text-center">PEARL: Preference Evolving Agent with RL</h2>
+
+            <!-- Figure 4 -->
+            <div class="mb-8">
+                <img src="images/fig4.png" alt="Overview of the PEARL architecture"
+                    class="w-full rounded-xl shadow-lg mb-4 bg-white">
+                <p class="text-sm text-gray-600 text-center italic">
+                    Overview of PEARL. The agent uses an external <strong>Strategy
+                        Hub</strong> to store and update interpretable decision strategies, optimized via a
+                    curriculum-based reward model.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="text-blue-500 text-2xl mb-3"><i class="fa-solid fa-memory"></i></div>
+                    <h3 class="font-bold text-lg mb-2">Strategy Hub</h3>
+                    <p class="text-gray-600 text-sm">
+                        An external memory module that stores interpretable decision strategies (preference states). It
+                        is iteratively retrieved and updated to capture newly revealed user priorities.
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="text-green-500 text-2xl mb-3"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3 class="font-bold text-lg mb-2">Curriculum Rewards</h3>
+                    <p class="text-gray-600 text-sm">
+                        Optimized round-wise reward design that shifts emphasis from preference inference in early
+                        rounds to consistent decision-making in later rounds.
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="text-purple-500 text-2xl mb-3"><i class="fa-solid fa-robot"></i></div>
+                    <h3 class="font-bold text-lg mb-2">Self-Evolving</h3>
+                    <p class="text-gray-600 text-sm">
+                        The agent adapts on-the-fly. Unlike static prompts, PEARL refines its policy based on
+                        interaction history to align with shifting user constraints.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-bold mb-6 border-b pb-2 border-gray-200">Experimental Results</h2>
+
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                <!-- Recreated Table 1 -->
+                <div class="lg:w-1/2 w-full">
+                    <h3 class="font-bold text-gray-800 mb-3">Performance Comparison </h3>
+                    <div class="overflow-x-auto">
+                        <table
+                            class="min-w-full text-sm text-left text-gray-700 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <thead class="bg-gray-100 text-gray-800 uppercase text-xs">
+                                <tr>
+                                    <th class="px-4 py-3 font-semibold">Method</th>
+                                    <th class="px-4 py-3 font-semibold text-right">AER.</th>
+                                    <th class="px-4 py-3 font-semibold text-right">ERR.</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                <tr>
+                                    <td class="px-4 py-3 font-medium">Zero-shot</td>
+                                    <td class="px-4 py-3 text-right">0.45</td>
+                                    <td class="px-4 py-3 text-right bg-red-100 text-red-700 font-semibold">-0.029</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-medium">SFT</td>
+                                    <td class="px-4 py-3 text-right">0.27</td>
+                                    <td class="px-4 py-3 text-right bg-emerald-100 text-emerald-800 font-semibold">0.325
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-medium">Zero-shot <span class="italic font-semibold">+
+                                            StrategyHub</span></td>
+                                    <td class="px-4 py-3 text-right">0.41</td>
+                                    <td class="px-4 py-3 text-right bg-emerald-50 text-emerald-800 font-semibold">0.048
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="px-4 py-3 font-bold text-gray-900">PEARL</td>
+                                    <td class="px-4 py-3 text-right font-bold text-gray-900">0.12 (&#8595;)</td>
+                                    <td class="px-4 py-3 text-right font-bold text-white bg-emerald-600">0.761 (&#8593;)
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">
+                        * Comparison on CALCONFLICTBENCH (W=20, M=5). PEARL achieves significantly lower error rates
+                        compared to strong baselines.
+                    </p>
+                </div>
+
+                <!-- Figure 5 Column -->
+                <div class="lg:w-1/2 w-full">
+                    <h3 class="font-bold text-gray-800 mb-3">Error Rate vs Decision Rounds</h3>
+                    <img src="images/fig5.png" alt="Error rate versus decision rounds"
+                        class="w-full rounded-xl shadow-lg mb-4">
+                    <p class="text-sm text-gray-600 italic">
+                        Error rate evolution. While baselines remain flat, PEARL shows
+                        monotonic error reduction as decision rounds increase, demonstrating effective preference
+                        learning.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call for Data -->
+        <section class="mb-16">
+            <h2 class="text-yellow-700 text-2xl font-bold mb-4 border-b pb-2 border-gray-200">📢 Call for your Calendar
+                data!
+            </h2>
+            <div class="bg-yellow-50 border border-yellow-100 rounded-xl p-6 text-gray-800">
+                <p class="text-lg leading-relaxed">
+                    If you're willing to share calendar data for real-world human data evaluation, please email
+                    <a href="mailto:bl61@illinois.edu" class="text-yellow-700 font-semibold hover:underline">bl61 AT
+                        illinois DOT edu</a>.
+                    We'll fully anonymize it and share the sanitized version back for your approval before use. We are
+                    happyto acknowledge you on the dataset page if you'd
+                    like. Together, let's make LLMs better at time management 🚀
+                </p>
+            </div>
+        </section>
+
+        <!-- Citation -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-4">Citation</h2>
+            <div class="bg-gray-800 rounded-lg p-4 overflow-x-auto relative group">
+                <button onclick="navigator.clipboard.writeText(document.getElementById('bibtex').innerText)"
+                    class="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                    Copy
+                </button>
+                <pre id="bibtex" class="text-gray-300 text-sm font-mono whitespace-pre">
+
+                </pre>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <!-- <footer class="border-t border-gray-200 pt-8 pb-12 text-center text-gray-500 text-sm">
+            <p>&copy; 2026 PEARL Project. University of Illinois at Urbana-Champaign.</p>
+            <div class="mt-2 space-x-4">
+                <a href="#" class="hover:text-blue-600">Contact</a>
+                <a href="#" class="hover:text-blue-600">License</a>
+            </div>
+        </footer> -->
+
+    </main>
+
+</body>
+
+</html>
