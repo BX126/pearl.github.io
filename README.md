@@ -1,1 +1,2 @@
-# http-pearl.github.io
+# pearl.github.io
+contact: bl61@illinois.edu
